@@ -1,0 +1,535 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "어제에 이어 DP"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "6\n",
+      "10 20 10 30 20 50\n",
+      "4\n"
+     ]
+    }
+   ],
+   "source": [
+    "#BOJ 11053_가장 긴 증가하는 부분 수열\n",
+    "'''\n",
+    "D[i]가 A[i]를 마지막으루 하는 가장 긴 증가하는 부분 수열일 때\n",
+    "D[i] = max(D[j]) + 1 (j < i, A[j] < A[i])\n",
+    "자기 자신보다 작은 숫자들 중 가장 긴 길이를 구하고, 그 길이에 + 1\n",
+    "\n",
+    "'''\n",
+    "\n",
+    "n = int(input())\n",
+    "a = list(map(int, input().split()))\n",
+    "d = [0 for i in range(n)]\n",
+    "for i in range(n):\n",
+    "    for j in range(i):\n",
+    "        if a[i] > a[j] and d[i] < d[j]:\n",
+    "            d[i] = d[j]\n",
+    "    d[i] += 1\n",
+    "print(max(d))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "6\n",
+      "10 30 10 20 20 10\n",
+      "3\n"
+     ]
+    }
+   ],
+   "source": [
+    "#BOJ 11722_가장 긴 감소하는 부분 수열\n",
+    "#위와 같은 꼴로 풀면\n",
+    "'''\n",
+    "D[i] = max(D[j]) (j < i, A[j] > A[i])\n",
+    "\n",
+    "'''\n",
+    "\n",
+    "n = int(input())\n",
+    "a = list(map(int, input().split()))\n",
+    "d = [0 for i in range(n)]\n",
+    "for i in range(n-1, -1, -1):\n",
+    "    for j in range(n - 1, i, -1):\n",
+    "        if a[i] > a[j] and d[i] < d[j]:\n",
+    "            d[i] = d[j]\n",
+    "    d[i] += 1\n",
+    "print(max(d))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "6\n",
+      "10 30 10 20 20 10\n",
+      "3\n"
+     ]
+    }
+   ],
+   "source": [
+    "#BOJ 11722_가장 긴 감소하는 부분 수열\n",
+    "#M2\n",
+    "'''\n",
+    "i보다 작은 j 중 값이 i의 것보다 큰 것을 구하고\n",
+    "s에 dp 값을 어펜드, s 중 가장 큰 값에 +1\n",
+    "\n",
+    "'''\n",
+    "\n",
+    "n = int(input())\n",
+    "a = list(map(int, input().split()))\n",
+    "d = [0 for i in range(n)]\n",
+    "for i in range(n):\n",
+    "    s = []\n",
+    "    for j in range(i):\n",
+    "        if a[i] < a[j]:\n",
+    "            s.append(d[j])\n",
+    "    if not s:\n",
+    "        continue\n",
+    "    else:\n",
+    "        d[i] += max(s)+1\n",
+    "print(max(d)+1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "10\n",
+      "1 5 2 1 4 3 4 5 2 1\n",
+      "7\n"
+     ]
+    }
+   ],
+   "source": [
+    "#BOJ 11054_가장 긴 바이토닉 부분 수열\n",
+    "'''\n",
+    "가장 긴 증가하는 부분 수열D\n",
+    "가장 긴 감소하는 부분수열 D2\n",
+    "D[i] + D2[i] -1 이 가장 큰 값\n",
+    "\n",
+    "'''\n",
+    "\n",
+    "n = int(input())\n",
+    "a = list(map(int, input().split()))\n",
+    "d1 = [0 for i in range(n)]\n",
+    "d2 = [0 for i in range(n)]\n",
+    "d3 = [0 for i in range(n)]\n",
+    "for i in range(n):\n",
+    "    for j in range(i):\n",
+    "        if a[i] > a[j] and d1[i] < d1[j]:\n",
+    "            d1[i] = d1[j]\n",
+    "    d1[i] += 1\n",
+    "for i in range(n-1, -1, -1):\n",
+    "    for j in range(n - 1, i, -1):\n",
+    "        if a[i] > a[j] and d2[i] < d2[j]:\n",
+    "            d2[i] = d2[j]\n",
+    "    d2[i] += 1\n",
+    "for i in range(n):\n",
+    "    d3[i] = d1[i] + d2[i] - 1\n",
+    "print(max(d3))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "ACAYKP\n",
+      "CAPCAK\n",
+      "4\n"
+     ]
+    }
+   ],
+   "source": [
+    "#9251_LCS\n",
+    "m = list(input())\n",
+    "n = list(input())\n",
+    "d = [[0]*(len(n)+1) for i in range(len(m)+1)]\n",
+    "for i in range(len(m)):\n",
+    "    for j in range(len(n)):\n",
+    "        if m[i] == n[j]:\n",
+    "            d[i+1][j+1] = d[i][j] + 1\n",
+    "        else:\n",
+    "            d[i+1][j+1] = max(d[i][j+1], d[i+1][j])\n",
+    "print(d[len(m)][len(n)])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "SWEA 남은 D3 문제 몇 개 더 풀고"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#2817_부분수열의 합\n",
+    "def combination(a, comb,k):\n",
+    "    cnt = 0\n",
+    "    for i in a:\n",
+    "        for j in list(comb):\n",
+    "            comb.append(i+j)\n",
+    "            if comb[-1] == k:\n",
+    "                cnt += 1\n",
+    "    return cnt\n",
+    "\n",
+    "t = int(input())\n",
+    "for tc in range(1, t+1):\n",
+    "    n,k = map(int, input().split())\n",
+    "    a = list(map(int, input().split()))\n",
+    "    comb = [0]\n",
+    "    print('#{} {}'.format(tc, combination(a, comb,k)))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#3233_정삼각형 분할 놀이\n",
+    "t = int(input())\n",
+    "for tc in range(1, t+1):\n",
+    "    a,b = map(int, input().split())\n",
+    "    s = a//b\n",
+    "    print('#{} {}'.format(tc, s**2))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#3142_영준이와 신비한 뿔의 숲\n",
+    "t = int(input())\n",
+    "for tc in range(1, t+1):\n",
+    "    n,m = map(int, input().split()) #뿔, 짐승\n",
+    "    l = [0] * m\n",
+    "    for i in range(n):\n",
+    "        i = i % m\n",
+    "        l[i] += 1\n",
+    "    print('#{} {} {}'.format(tc, l.count(1), l.count(2)))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#3131_100만 이하의 모든 소수\n",
+    "n = 10**6\n",
+    "a = [0,0] + [1]*(n-1)\n",
+    "primes = []\n",
+    "for i in range(2, n+1):\n",
+    "    if a[i]:\n",
+    "        primes.append(i)\n",
+    "        for j in range(i, n+1, i):\n",
+    "            a[j] = 0\n",
+    "for i in range(len(primes)):\n",
+    "    print(primes[i], end=' ')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#3304_최장공통부분수열\n",
+    "t = int(input())\n",
+    "for tc in range(1, t+1):\n",
+    "    let = input().split()\n",
+    "    m = let[0]\n",
+    "    n = let[1]\n",
+    "    d = [[0]*(len(n)+1) for _ in range(len(m)+1)]\n",
+    "\n",
+    "    for i in range(len(m)):\n",
+    "        for j in range(len(n)):\n",
+    "            if m[i] == n[j]:\n",
+    "                d[i + 1][j + 1] = d[i][j] + 1\n",
+    "            else:\n",
+    "                d[i + 1][j + 1] = max(d[i][j + 1], d[i + 1][j])\n",
+    "    print('#{} {}'.format(tc, d[len(m)][len(n)]))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#1860_진기의 최고급 붕어빵\n",
+    "t = int(input())\n",
+    "for tc in range(1, t+1):\n",
+    "    n,m,k = map(int, input().split())\n",
+    "    arr = list(map(int, input().split()))\n",
+    "    arr.sort()\n",
+    "    result = 'Possible'\n",
+    "    if len(arr) > n:\n",
+    "        result = 'Impossible'\n",
+    "    for i in range(len(arr)):\n",
+    "        if (arr[i]//m)*k < i+1:\n",
+    "            result = 'Impossible'\n",
+    "    print('#{} {}'.format(tc, result))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#1228_암호문1\n",
+    "for tc in range(10):\n",
+    "    a = int(input())\n",
+    "    b = list(map(int, input().split()))\n",
+    "    c = int(input())\n",
+    "    d = list(input().split())\n",
+    "    for i in range(len(d)):\n",
+    "        if d[i] == 'I':\n",
+    "            idx = int(d[i+1])\n",
+    "            nums = int(d[i+2])\n",
+    "            for j in range(nums):\n",
+    "                b.insert(idx+j, int(d[i+2+(j+1)]))\n",
+    "        else:\n",
+    "            continue\n",
+    "    print('#{} {}'.format(tc+1,' '.join(map(str, b[:10]))))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#1229_암호문2\n",
+    "for tc in range(10):\n",
+    "    a = int(input())\n",
+    "    b = list(map(int, input().split()))\n",
+    "    c = int(input())\n",
+    "    d = list(input().split())\n",
+    "    for i in range(len(d)):\n",
+    "        if d[i] == 'I':\n",
+    "            idx = int(d[i+1])\n",
+    "            nums = int(d[i+2])\n",
+    "            for j in range(nums):\n",
+    "                b.insert(idx+j, int(d[i+2+(j+1)]))\n",
+    "        elif d[i] == 'D':\n",
+    "            idx = int(d[i + 1])\n",
+    "            nums = int(d[i + 2])\n",
+    "            for j in range(nums):\n",
+    "                del b[idx]\n",
+    "        else:\n",
+    "            continue\n",
+    "    print('#{} {}'.format(tc+1,' '.join(map(str, b[:10]))))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#1230_암호문3\n",
+    "for tc in range(10):\n",
+    "    a = int(input())\n",
+    "    b = list(map(int, input().split()))\n",
+    "    c = int(input())\n",
+    "    d = list(input().split())\n",
+    "    for i in range(len(d)):\n",
+    "        if d[i] == 'I':\n",
+    "            idx = int(d[i + 1])\n",
+    "            nums = int(d[i + 2])\n",
+    "            for j in range(nums):\n",
+    "                b.insert(idx+j, int(d[i+2+(j+1)]))\n",
+    "        elif d[i] == 'D':\n",
+    "            idx = int(d[i + 1])\n",
+    "            nums = int(d[i + 2])\n",
+    "            for j in range(nums):\n",
+    "                del b[idx]\n",
+    "        elif d[i] == 'A':\n",
+    "            nums = int(d[i + 1])\n",
+    "            for j in range(nums):\n",
+    "                b.append(d[i + 2 + j])\n",
+    "        else:\n",
+    "            continue\n",
+    "    print('#{} {}'.format(tc+1,' '.join(map(str, b[:10]))))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#1234_비밀번호\n",
+    "#스택\n",
+    "for tc in range(10):\n",
+    "    a,b = input().split()\n",
+    "    s = []\n",
+    "    for ele in b:\n",
+    "        if len(s) == 0 or s[-1] != ele:\n",
+    "            s.append(ele)\n",
+    "        else:\n",
+    "            s.pop()\n",
+    "            continue\n",
+    "\n",
+    "    print('#{}'.format(tc+1, end=' '))\n",
+    "    print(''.join(s))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "내일 DFS 보기 전에 잠깐 자료구조 정리"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "14\n",
+      "push 1\n",
+      "push 2\n",
+      "top\n",
+      "2\n",
+      "size\n",
+      "2\n",
+      "empty\n",
+      "0\n",
+      "pop\n",
+      "2\n",
+      "pop\n",
+      "1\n",
+      "pop\n",
+      "-1\n",
+      "size\n",
+      "0\n",
+      "empty\n",
+      "1\n",
+      "pop\n",
+      "-1\n",
+      "push 3\n",
+      "empty\n",
+      "0\n",
+      "top\n",
+      "3\n"
+     ]
+    }
+   ],
+   "source": [
+    "#10828_스택\n",
+    "'''\n",
+    "pust, pop size, empty, top 구현\n",
+    "\n",
+    "'''\n",
+    "def push(n):\n",
+    "    s.append(n)\n",
+    "def pop():\n",
+    "    if not s:\n",
+    "        print(-1)\n",
+    "    else:\n",
+    "        print(s[-1])\n",
+    "        del(s[-1])\n",
+    "def size():\n",
+    "    print(len(s))\n",
+    "def empty():\n",
+    "    if not s:\n",
+    "        print(1)\n",
+    "    else:\n",
+    "        print(0)\n",
+    "def top():\n",
+    "    if not s:\n",
+    "        print(-1)\n",
+    "    else:\n",
+    "        print(s[-1])\n",
+    "\n",
+    "n = int(input())\n",
+    "s = []\n",
+    "\n",
+    "for i in range(n):\n",
+    "    cmd = list(input().split())\n",
+    "\n",
+    "    if cmd[0] == 'push':\n",
+    "        push(cmd[1])\n",
+    "    elif cmd[0] == 'pop':\n",
+    "        pop()\n",
+    "    elif cmd[0] == 'size':\n",
+    "        size()\n",
+    "    elif cmd[0] == 'empty':\n",
+    "        empty()\n",
+    "    elif cmd[0] == 'top':\n",
+    "        top()"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
